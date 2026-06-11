@@ -1,4 +1,5 @@
 import { MeetingRequestModel, connectToDatabase } from "@repo/db";
+import { ApiError } from "../errors";
 import { hasDatabaseConfig } from "../env";
 import { meetingRequestSchema, meetingRequestStatusSchema } from "../validation";
 import { toPlain } from "../plain";
@@ -56,7 +57,7 @@ export async function updateMeetingRequestStatus(id: string, status: unknown) {
   ).lean();
 
   if (!updated) {
-    throw new Error("Meeting request not found");
+    throw new ApiError("Meeting request not found", 404);
   }
 
   return toPlain({

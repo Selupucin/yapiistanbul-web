@@ -11,6 +11,9 @@ const analyticsEventSchema = new Schema(
   { timestamps: true }
 );
 
+// Analytics summaries filter by type + createdAt range; index both together.
+analyticsEventSchema.index({ type: 1, createdAt: -1 });
+
 export type AnalyticsEvent = InferSchemaType<typeof analyticsEventSchema> & { _id: string };
 
 export const AnalyticsEventModel: Model<AnalyticsEvent> =

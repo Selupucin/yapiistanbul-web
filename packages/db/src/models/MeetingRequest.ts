@@ -11,6 +11,9 @@ const meetingRequestSchema = new Schema(
   { timestamps: true }
 );
 
+// Meeting requests are listed newest-first and filtered by status.
+meetingRequestSchema.index({ status: 1, createdAt: -1 });
+
 export type MeetingRequest = InferSchemaType<typeof meetingRequestSchema> & { _id: string };
 
 export const MeetingRequestModel: Model<MeetingRequest> =
