@@ -1,8 +1,25 @@
 import type { NextConfig } from "next";
 
-// Conservative, non-breaking security headers. A full Content-Security-Policy
-// is intentionally deferred (it needs per-deploy testing against Next inline
-// scripts, the Google Maps embed and remote images) and tracked in docs.
+// Content-Security-Policy in REPORT-ONLY mode: the browser logs violations to
+// the console but blocks nothing, so it can't break the live site. Once the
+// console is clean across all pages, switch the key to "Content-Security-Policy"
+// to enforce. Covers: Next inline hydration scripts/styles, self-hosted fonts,
+// Unsplash + Cloudinary images, and the Google Maps embed on /contact.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-src 'self' https://www.google.com https://maps.google.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -16,6 +33,7 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()",
   },
+  { key: "Content-Security-Policy-Report-Only", value: csp },
 ];
 
 const nextConfig: NextConfig = {
