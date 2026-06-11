@@ -1,7 +1,14 @@
 import { ADMIN_AUTH_COOKIE, loginAdmin, loginSchema, toErrorPayload } from "@repo/api";
 import { NextResponse } from "next/server";
+import { checkRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
+  if (!(await checkRateLimit(`login:${clientIp(req.headers)}`, 5, 60))) {
+    return NextResponse.json(
+      { ok: false, message: "Too many attempts. Please try again later." },
+      { status: 429 }
+    );
+  }
   try {
     const body = await req.json();
     const parsed = loginSchema.parse(body);
