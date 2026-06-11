@@ -42,14 +42,17 @@ export async function ensureDefaultAdmin() {
 
   await connectToDatabase();
 
+  // If any admin already exists, never auto-create another — credentials live
+  // in the database (managed via scripts/set-admin.mjs). The ADMIN_* env vars
+  // only seed the very first admin on a completely empty database.
+  const count = await AdminModel.countDocuments();
+  if (count > 0) return;
+
   const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
   if (!username || !password) {
     throw new ApiError("Admin credentials are not configured", 500);
   }
-
-  const existing = await AdminModel.findOne({ username }).lean();
-  if (existing) return;
 
   const passwordHash = await bcrypt.hash(password, 12);
   await AdminModel.create({ username, passwordHash });
