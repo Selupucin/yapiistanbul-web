@@ -10,9 +10,6 @@ import { submitMeetingRequestAction } from "./actions";
 export const metadata: Metadata = {
   title: "Iletisim",
   description: "Yapi Istanbul iletisime gecin",
-  alternates: {
-    canonical: "/contact",
-  },
 };
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {

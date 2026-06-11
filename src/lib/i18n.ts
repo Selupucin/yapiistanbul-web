@@ -1,18 +1,16 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { cache } from "react";
 
-export type SiteLang = "en" | "tr";
+export * from "./locale";
+import type { SiteLang } from "./locale";
 
 export const getLang = cache(async (): Promise<SiteLang> => {
+  // URL-driven locale (set by proxy.ts from the /en prefix) wins; fall back to
+  // the legacy cookie, then default to Turkish.
+  const h = await headers();
+  const fromHeader = h.get("x-app-locale");
+  if (fromHeader === "en" || fromHeader === "tr") return fromHeader;
+
   const store = await cookies();
-  const lang = store.get("site_lang")?.value;
-  return lang === "en" ? "en" : "tr";
+  return store.get("site_lang")?.value === "en" ? "en" : "tr";
 });
-
-export const t = (lang: SiteLang, tr: string, en: string) => {
-  return lang === "tr" ? tr : en;
-};
-
-export function dateLocale(lang: SiteLang) {
-  return lang === "tr" ? "tr-TR" : "en-US";
-}

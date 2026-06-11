@@ -50,7 +50,6 @@ export async function generateMetadata(context: {
     description:
       project.summary ||
       `${project.name} — Yapı İstanbul tarafından geliştirilen proje detayları.`,
-    alternates: { canonical: `/projects/${slug}` },
     openGraph: {
       title: project.name,
       description: project.summary || undefined,

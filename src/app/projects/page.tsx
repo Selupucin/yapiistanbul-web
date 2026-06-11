@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Projelerimiz",
   description:
     "Yapı İstanbul'un geliştirdiği konut, ticari ve karma kullanımlı projeler.",
-  alternates: { canonical: "/projects" },
 };
 
 export default async function ProjectsPage() {

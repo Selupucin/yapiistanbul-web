@@ -5,14 +5,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com";
   const now = new Date();
 
+  const en = (path: string) => (path === "/" ? "/en" : `/en${path}`);
+
+  // Each entry lists the TR url plus its /en alternate (hreflang in the sitemap).
+  const entry = (
+    path: string,
+    changeFrequency: "daily" | "weekly" | "monthly" | "yearly",
+    priority: number,
+    lastModified: Date = now
+  ): MetadataRoute.Sitemap[number] => ({
+    url: `${base}${path}`,
+    lastModified,
+    changeFrequency,
+    priority,
+    alternates: { languages: { tr: `${base}${path}`, en: `${base}${en(path)}` } },
+  });
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}`, lastModified: now, changeFrequency: "daily", priority: 1 },
-    { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/projects`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${base}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/privacy-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/cookies-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    entry("/", "daily", 1),
+    entry("/about", "monthly", 0.7),
+    entry("/projects", "weekly", 0.9),
+    entry("/blog", "weekly", 0.85),
+    entry("/contact", "monthly", 0.8),
+    entry("/privacy-policy", "yearly", 0.3),
+    entry("/cookies-policy", "yearly", 0.3),
   ];
 
   // Dynamic detail pages. safeProjects/safeBlogs are cached and fall back to []
@@ -21,21 +37,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const projectRoutes: MetadataRoute.Sitemap = projects
     .filter((p) => p?.slug)
-    .map((p) => ({
-      url: `${base}/projects/${p.slug}`,
-      lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    }));
+    .map((p) => entry(`/projects/${p.slug}`, "weekly", 0.8, p.updatedAt ? new Date(p.updatedAt) : now));
 
   const blogRoutes: MetadataRoute.Sitemap = blogs
     .filter((b) => b?.slug)
-    .map((b) => ({
-      url: `${base}/blog/${b.slug}`,
-      lastModified: b.updatedAt ? new Date(b.updatedAt) : now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    }));
+    .map((b) => entry(`/blog/${b.slug}`, "monthly", 0.7, b.updatedAt ? new Date(b.updatedAt) : now));
 
   return [...staticRoutes, ...projectRoutes, ...blogRoutes];
 }

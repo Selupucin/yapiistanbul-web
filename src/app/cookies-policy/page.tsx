@@ -7,7 +7,6 @@ import { getLang, t } from "@/lib/i18n";
 export const metadata: Metadata = {
   title: "Çerez Politikası",
   description: "Yapı İstanbul çerez politikası",
-  alternates: { canonical: "/cookies-policy" },
 };
 
 export default async function CookiesPolicyPage() {

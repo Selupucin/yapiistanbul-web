@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getLang, t } from "@/lib/i18n";
+import { getLang, t, localePath } from "@/lib/i18n";
 import { ScrollTopButton } from "@/components/scroll-top-button";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { SiteHeader } from "@/components/site-header";
@@ -10,16 +10,17 @@ import { safeContact, safeSettings } from "@/lib/data";
 
 export async function SiteShell({ children }: { children: React.ReactNode }) {
   const lang = await getLang();
+  const lp = (path: string) => localePath(lang, path);
   const [settings, contact] = await Promise.all([safeSettings(), safeContact()]);
   const menuLabel = t(lang, "Menü", "Menu");
   const closeLabel = t(lang, "Kapat", "Close");
   const blogLabel = t(lang, "Blog", "Blog");
   const navItems = [
-    { href: "/", label: t(lang, "Anasayfa", "Home") },
-    { href: "/about", label: t(lang, "Hakkımızda", "About") },
-    { href: "/projects", label: t(lang, "Projeler", "Projects") },
-    { href: "/blog", label: blogLabel },
-    { href: "/contact", label: t(lang, "İletişim", "Contact") },
+    { href: lp("/"), label: t(lang, "Anasayfa", "Home") },
+    { href: lp("/about"), label: t(lang, "Hakkımızda", "About") },
+    { href: lp("/projects"), label: t(lang, "Projeler", "Projects") },
+    { href: lp("/blog"), label: blogLabel },
+    { href: lp("/contact"), label: t(lang, "İletişim", "Contact") },
   ];
 
   const phoneHref = `tel:${String(contact.phone || "").replace(/\s+/g, "")}`;
@@ -52,9 +53,9 @@ export async function SiteShell({ children }: { children: React.ReactNode }) {
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-[#1f3f7a]">{t(lang, "Kurumsal", "Corporate")}</p>
             <ul className="mt-3 space-y-2 text-sm text-[#4f6080]">
-              <li><Link href="/about" className="link-hover">{t(lang, "Hakkımızda", "About")}</Link></li>
-              <li><Link href="/projects" className="link-hover">{t(lang, "Projeler", "Projects")}</Link></li>
-              <li><Link href="/blog" className="link-hover">{blogLabel}</Link></li>
+              <li><Link href={lp("/about")} className="link-hover">{t(lang, "Hakkımızda", "About")}</Link></li>
+              <li><Link href={lp("/projects")} className="link-hover">{t(lang, "Projeler", "Projects")}</Link></li>
+              <li><Link href={lp("/blog")} className="link-hover">{blogLabel}</Link></li>
             </ul>
           </div>
 
@@ -78,10 +79,10 @@ export async function SiteShell({ children }: { children: React.ReactNode }) {
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-[#1f3f7a]">{t(lang, "Diğer", "Other")}</p>
             <ul className="mt-3 space-y-2 text-sm text-[#4f6080]">
-              <li><Link href="/contact" className="link-hover">{t(lang, "Bize Yazın", "Get In Touch")}</Link></li>
-              <li><Link href="/blog" className="link-hover">{blogLabel}</Link></li>
-              <li><Link href="/privacy-policy" className="link-hover">{t(lang, "Gizlilik Politikası", "Privacy Policy")}</Link></li>
-              <li><Link href="/cookies-policy" className="link-hover">{t(lang, "Çerez Politikası", "Cookies Policy")}</Link></li>
+              <li><Link href={lp("/contact")} className="link-hover">{t(lang, "Bize Yazın", "Get In Touch")}</Link></li>
+              <li><Link href={lp("/blog")} className="link-hover">{blogLabel}</Link></li>
+              <li><Link href={lp("/privacy-policy")} className="link-hover">{t(lang, "Gizlilik Politikası", "Privacy Policy")}</Link></li>
+              <li><Link href={lp("/cookies-policy")} className="link-hover">{t(lang, "Çerez Politikası", "Cookies Policy")}</Link></li>
               <li><CookiePreferencesLink label={t(lang, "Çerez Tercihleri", "Cookie Preferences")} /></li>
             </ul>
           </div>

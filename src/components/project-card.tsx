@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { SiteLang } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
+import { localePath } from "@/lib/locale";
 import { localizedLocation, localizedName, localizedSummary, projectCoverImage } from "@/lib/content";
 import { slugify } from "@/lib/slug";
 
@@ -55,7 +56,7 @@ export function ProjectCard({
 
   return (
     <Link
-      href={`/projects/${slug}`}
+      href={localePath(lang, `/projects/${slug}`)}
       className="group isolate flex h-full flex-col overflow-hidden rounded-2xl border border-[#dbe5f4] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#1a4f9d] hover:shadow-lg"
     >
       <div

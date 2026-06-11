@@ -11,9 +11,6 @@ import { safeBlogs } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Yapi Istanbul blog yazilari",
-  alternates: {
-    canonical: "/blog",
-  },
 };
 
 export default async function BlogPage() {

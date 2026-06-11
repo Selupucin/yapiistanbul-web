@@ -6,8 +6,7 @@ import { usePathname } from "next/navigation";
 import { LanguageToggle } from "@/components/language-toggle";
 import { NavLinks } from "@/components/nav-links";
 import { MobileNav } from "@/components/mobile-nav";
-
-type SiteLang = "en" | "tr";
+import { localePath, type SiteLang } from "@/lib/locale";
 
 type NavItem = {
   href: string;
@@ -32,7 +31,7 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-20 border-b border-[#e0e8f5] bg-white/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-        <Link href="/" className="inline-flex items-center gap-3 text-lg font-bold tracking-wide text-[#0c2c64]">
+        <Link href={localePath(lang, "/")} className="inline-flex items-center gap-3 text-lg font-bold tracking-wide text-[#0c2c64]">
           {settings.siteLogo ? (
             <Image
               src={settings.siteLogo}

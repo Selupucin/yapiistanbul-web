@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Playfair_Display, Manrope } from "next/font/google";
 import { getLang } from "@/lib/i18n";
+import { localePath, stripLocale } from "@/lib/locale";
 import { safeSettings } from "@/lib/data";
 import "./globals.css";
 
@@ -15,7 +17,12 @@ const bodyFont = Manrope({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await safeSettings();
+  const [settings, lang, h] = await Promise.all([safeSettings(), getLang(), headers()]);
+
+  // Build per-locale URLs from the real request path so every page emits
+  // correct canonical + hreflang alternates centrally.
+  const bare = stripLocale(h.get("x-pathname") || "/");
+  const selfUrl = localePath(lang, bare);
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com"),
@@ -32,16 +39,21 @@ export async function generateMetadata(): Promise<Metadata> {
       "premium konut",
     ],
     alternates: {
-      canonical: "/",
+      canonical: selfUrl,
+      languages: {
+        tr: bare,
+        en: localePath("en", bare),
+        "x-default": bare,
+      },
     },
     icons: settings.siteFavicon ? { icon: settings.siteFavicon } : undefined,
     openGraph: {
       type: "website",
-      locale: "tr_TR",
+      locale: lang === "tr" ? "tr_TR" : "en_US",
       siteName: "Yapı İstanbul",
       title: "Yapı İstanbul",
       description: "İstanbul odaklı premium konut ve ticari proje geliştirme firması.",
-      url: "/",
+      url: selfUrl,
     },
     twitter: {
       card: "summary_large_image",

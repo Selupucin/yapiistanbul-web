@@ -7,7 +7,6 @@ import { getLang, t } from "@/lib/i18n";
 export const metadata: Metadata = {
   title: "Gizlilik Politikası",
   description: "Yapı İstanbul gizlilik politikası",
-  alternates: { canonical: "/privacy-policy" },
 };
 
 export default async function PrivacyPolicyPage() {
