@@ -11,9 +11,6 @@ export const metadata: Metadata = {
   title: "Anasayfa",
   description:
     "Yapi Istanbul ile Istanbul odakli premium konut ve ticari proje gelistirme deneyimi.",
-  alternates: {
-    canonical: "/",
-  },
 };
 
 export default async function Home() {
