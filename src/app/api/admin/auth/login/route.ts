@@ -1,4 +1,4 @@
-import { ADMIN_AUTH_COOKIE, loginAdmin, loginSchema } from "@repo/api";
+import { ADMIN_AUTH_COOKIE, loginAdmin, loginSchema, toErrorPayload } from "@repo/api";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -17,7 +17,10 @@ export async function POST(req: Request) {
     });
     return res;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Login failed";
-    return NextResponse.json({ ok: false, message }, { status: 401 });
+    // Invalid credentials surface as ApiError(401); unexpected/validation errors
+    // are sanitized by toErrorPayload so internal details never leak.
+    const payload = toErrorPayload(error);
+    const status = payload.status === 500 ? 401 : payload.status;
+    return NextResponse.json({ ok: false, message: "Invalid credentials" }, { status });
   }
 }

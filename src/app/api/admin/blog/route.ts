@@ -1,9 +1,9 @@
-import { createBlog, listBlogs, routeHandler } from "@repo/api";
+import { adminRouteHandler, createBlog, listBlogs } from "@repo/api";
 
-export const GET = () => routeHandler(async () => listBlogs());
+export const GET = () => adminRouteHandler(() => listBlogs());
 
 export async function POST(req: Request) {
-  return routeHandler(async () => {
+  return adminRouteHandler(async () => {
     const body = await req.json();
     return createBlog(body);
   });
