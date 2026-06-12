@@ -5,12 +5,10 @@ import { getLang } from "@/lib/i18n";
 import { localePath, stripLocale } from "@/lib/locale";
 import { safeSettings } from "@/lib/data";
 import { GoogleAnalytics } from "@/components/google-analytics";
-import { GoogleTagManager } from "@/components/google-tag-manager";
 import "./globals.css";
 
-// Public analytics IDs (visible in the page), overridable per environment.
+// Public GA4 id (visible in the page), overridable per environment.
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-7Z9D6K3RCR";
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-527HLWVS";
 
 const titleFont = Playfair_Display({
   variable: "--font-title",
@@ -83,7 +81,6 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
         {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>
