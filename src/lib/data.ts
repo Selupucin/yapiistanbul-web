@@ -32,7 +32,7 @@ const getCachedContact = unstable_cache(
     } catch {
       return {
         phone: "+90 212 000 00 00",
-        email: "info@yapiistanbul.com",
+        email: "info@yapiistanbul.com.tr",
         address: "Istanbul, Turkiye",
         mapLocation: "https://maps.google.com",
       };

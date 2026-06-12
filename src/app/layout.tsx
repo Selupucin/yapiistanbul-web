@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const selfUrl = localePath(lang, bare);
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com.tr"),
     title: {
       default: "Yapı İstanbul",
       template: "%s | Yapı İstanbul",

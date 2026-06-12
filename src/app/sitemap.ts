@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { safeBlogs, safeProjects } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com.tr";
   const now = new Date();
 
   const en = (path: string) => (path === "/" ? "/en" : `/en${path}`);

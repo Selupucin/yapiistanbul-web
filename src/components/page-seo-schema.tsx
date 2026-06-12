@@ -35,7 +35,7 @@ export function PageSeoSchema({
   isLocalBusiness,
   contact,
 }: PageSeoSchemaProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yapiistanbul.com.tr";
   const pageUrl = `${baseUrl}${path}`;
 
   const organization: Record<string, unknown> = {
@@ -44,7 +44,7 @@ export function PageSeoSchema({
     name: "Yapı İstanbul",
     url: baseUrl,
     logo: `${baseUrl}/favicon.ico`,
-    email: contact?.email || "info@yapiistanbul.com",
+    email: contact?.email || "info@yapiistanbul.com.tr",
     telephone: contact?.phone || "+90 212 000 00 00",
     address: {
       "@type": "PostalAddress",
