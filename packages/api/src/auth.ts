@@ -27,8 +27,11 @@ export type AdminTokenPayload = {
   username: string;
 };
 
-export function signAdminToken(payload: AdminTokenPayload) {
-  return jwt.sign(payload, getJwtSecret(), { expiresIn: JWT_EXPIRES_IN });
+export function signAdminToken(
+  payload: AdminTokenPayload,
+  expiresIn: SignOptions["expiresIn"] = JWT_EXPIRES_IN
+) {
+  return jwt.sign(payload, getJwtSecret(), { expiresIn });
 }
 
 export function verifyAdminToken(token: string): AdminTokenPayload {
@@ -58,7 +61,7 @@ export async function ensureDefaultAdmin() {
   await AdminModel.create({ username, passwordHash });
 }
 
-export async function loginAdmin(username: string, password: string) {
+export async function loginAdmin(username: string, password: string, rememberMe = false) {
   if (!hasDatabaseConfig()) {
     throw new ApiError("Database config missing", 500);
   }
@@ -76,6 +79,9 @@ export async function loginAdmin(username: string, password: string) {
     throw new ApiError("Invalid credentials", 401);
   }
 
-  const token = signAdminToken({ sub: String(admin._id), username: admin.username });
+  const token = signAdminToken(
+    { sub: String(admin._id), username: admin.username },
+    rememberMe ? "30d" : JWT_EXPIRES_IN
+  );
   return { token, username: admin.username };
 }
