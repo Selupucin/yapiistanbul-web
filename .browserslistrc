@@ -1,0 +1,8 @@
+# Target modern browsers so the build drops legacy polyfills (Array.at,
+# Array.flat/flatMap, Object.fromEntries/hasOwn, String.trimStart/trimEnd).
+# ~3 years of browser support, covers the real-estate audience.
+chrome >= 100
+edge >= 100
+firefox >= 100
+safari >= 15.4
+ios_saf >= 15.4

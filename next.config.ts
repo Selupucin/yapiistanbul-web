@@ -12,12 +12,13 @@ const csp = [
   "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com",
   "font-src 'self' data:",
   "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
-  "frame-src 'self' https://www.google.com https://maps.google.com",
+  "frame-src 'self' https://www.google.com https://maps.google.com https://www.youtube.com https://player.vimeo.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'self'",
-  "upgrade-insecure-requests",
+  // `upgrade-insecure-requests` is intentionally omitted: it is ignored in
+  // Report-Only mode (causes a console error) and re-added when CSP is enforced.
 ].join("; ");
 
 const securityHeaders = [
@@ -33,6 +34,9 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()",
   },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+  // Kept Report-Only because Google Tag Manager injects tag scripts dynamically;
+  // a strict enforced policy would block them. Enforce once GTM tags are final.
   { key: "Content-Security-Policy-Report-Only", value: csp },
 ];
 
