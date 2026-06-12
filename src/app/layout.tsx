@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { headers } from "next/headers";
 import { Playfair_Display, Manrope } from "next/font/google";
 import { getLang } from "@/lib/i18n";
 import { localePath, stripLocale } from "@/lib/locale";
 import { safeSettings } from "@/lib/data";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import "./globals.css";
 
 // Google Analytics 4 measurement ID. Public (visible in the page), so it can
@@ -82,20 +82,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        {GA_ID ? (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
-            </Script>
-          </>
-        ) : null}
+        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>
   );
