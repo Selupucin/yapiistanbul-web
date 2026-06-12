@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import heroImage from "@/assets/hero.webp";
 import { SiteShell } from "@/components/site-shell";
 import { PageSeoSchema } from "@/components/page-seo-schema";
 import { ProjectCard } from "@/components/project-card";
@@ -68,10 +69,11 @@ export default async function Home() {
       <section className="relative -mx-4 -mt-10 mb-20 min-h-[calc(100vh-68px)] overflow-hidden sm:-mx-6 lg:-mx-8">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&q=85"
-            alt="Istanbul mimari gorunum"
+            src={heroImage}
+            alt="İstanbul mimari görünüm — Yapı İstanbul"
             fill
             priority
+            placeholder="blur"
             sizes="100vw"
             className="object-cover"
           />
