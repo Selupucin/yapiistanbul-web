@@ -1,38 +1,46 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { localePath, stripLocale, type SiteLang } from "@/lib/locale";
 
 export function LanguageToggle({ lang }: { lang: SiteLang }) {
+  const router = useRouter();
   const pathname = usePathname();
   const bare = stripLocale(pathname || "/");
-  const hrefFor = (target: SiteLang) => localePath(target, bare);
 
-  // Plain <a> (full navigation) instead of router.push: the proxy rewrites
-  // /en/* to the prefix-less route, so a soft client navigation can reuse the
-  // cached other-language render and require a second click. A hard navigation
-  // re-runs the proxy and renders the correct locale in one click.
-  const base =
-    "rounded-full px-2 py-1 transition";
+  // Smooth, no full reload, keeps scroll position:
+  // - router.push(..., { scroll: false }) changes the URL without jumping to top
+  // - router.refresh() forces the server to re-render in the new locale, which
+  //   is required because the /en proxy rewrite resolves to the same underlying
+  //   route and would otherwise reuse the current-language render.
+  const switchTo = (target: SiteLang) => {
+    if (target === lang) return;
+    router.push(localePath(target, bare), { scroll: false });
+    router.refresh();
+  };
+
+  const base = "rounded-full px-2 py-1 transition";
   const activeCls = "navy-gradient text-white";
   const idleCls = "hover:bg-[#eef4ff]";
 
   return (
     <div className="inline-flex items-center rounded-full border border-[#cbdaf1] bg-white p-1 text-xs font-semibold text-[#21457f]">
-      <a
-        href={hrefFor("en")}
-        aria-current={lang === "en" ? "true" : undefined}
+      <button
+        type="button"
+        onClick={() => switchTo("en")}
+        aria-pressed={lang === "en"}
         className={`${base} ${lang === "en" ? activeCls : idleCls}`}
       >
         EN
-      </a>
-      <a
-        href={hrefFor("tr")}
-        aria-current={lang === "tr" ? "true" : undefined}
+      </button>
+      <button
+        type="button"
+        onClick={() => switchTo("tr")}
+        aria-pressed={lang === "tr"}
         className={`${base} ${lang === "tr" ? activeCls : idleCls}`}
       >
         TR
-      </a>
+      </button>
     </div>
   );
 }
