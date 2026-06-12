@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: ["mongoose"],
   images: {
+    // Next 16 requires an explicit quality allowlist. 60 for the dark-overlaid
+    // hero (quality loss is invisible under the gradient), 75 default elsewhere.
+    qualities: [60, 75],
     remotePatterns: [
       {
         protocol: "https",
