@@ -1,37 +1,38 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { localePath, stripLocale, type SiteLang } from "@/lib/locale";
 
 export function LanguageToggle({ lang }: { lang: SiteLang }) {
-  const router = useRouter();
   const pathname = usePathname();
-  const active = lang;
+  const bare = stripLocale(pathname || "/");
+  const hrefFor = (target: SiteLang) => localePath(target, bare);
 
-  const goTo = (next: SiteLang) => {
-    if (next === active) return;
-    // Keep the cookie in sync as a fallback for the prefix-less default.
-    document.cookie = `site_lang=${next}; path=/; max-age=31536000; samesite=lax`;
-    const bare = stripLocale(pathname || "/");
-    router.push(localePath(next, bare));
-  };
+  // Plain <a> (full navigation) instead of router.push: the proxy rewrites
+  // /en/* to the prefix-less route, so a soft client navigation can reuse the
+  // cached other-language render and require a second click. A hard navigation
+  // re-runs the proxy and renders the correct locale in one click.
+  const base =
+    "rounded-full px-2 py-1 transition";
+  const activeCls = "navy-gradient text-white";
+  const idleCls = "hover:bg-[#eef4ff]";
 
   return (
     <div className="inline-flex items-center rounded-full border border-[#cbdaf1] bg-white p-1 text-xs font-semibold text-[#21457f]">
-      <button
-        type="button"
-        onClick={() => goTo("en")}
-        className={`rounded-full px-2 py-1 transition ${active === "en" ? "navy-gradient text-white" : "hover:bg-[#eef4ff]"}`}
+      <a
+        href={hrefFor("en")}
+        aria-current={lang === "en" ? "true" : undefined}
+        className={`${base} ${lang === "en" ? activeCls : idleCls}`}
       >
         EN
-      </button>
-      <button
-        type="button"
-        onClick={() => goTo("tr")}
-        className={`rounded-full px-2 py-1 transition ${active === "tr" ? "navy-gradient text-white" : "hover:bg-[#eef4ff]"}`}
+      </a>
+      <a
+        href={hrefFor("tr")}
+        aria-current={lang === "tr" ? "true" : undefined}
+        className={`${base} ${lang === "tr" ? activeCls : idleCls}`}
       >
         TR
-      </button>
+      </a>
     </div>
   );
 }

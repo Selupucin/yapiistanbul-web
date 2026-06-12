@@ -65,3 +65,16 @@ export async function updateMeetingRequestStatus(id: string, status: unknown) {
     status: getMeetingStatus(updated.createdAt, updated.status),
   });
 }
+
+export async function deleteMeetingRequest(id: string) {
+  if (!hasDatabaseConfig()) {
+    return { _id: id, deleted: true };
+  }
+
+  await connectToDatabase();
+  const deleted = await MeetingRequestModel.findByIdAndDelete(id).lean();
+  if (!deleted) {
+    throw new ApiError("Meeting request not found", 404);
+  }
+  return toPlain({ _id: String(deleted._id), deleted: true });
+}
