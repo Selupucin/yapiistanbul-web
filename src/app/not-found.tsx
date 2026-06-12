@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/site-shell";
+import { GoBackButton } from "@/components/go-back-button";
 import { getLang, t } from "@/lib/i18n";
 
 export const metadata: Metadata = {
@@ -26,11 +27,12 @@ export default async function NotFound() {
             )}
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <GoBackButton
+              label={t(lang, "← Önceki Sayfa", "← Go Back")}
+              className="rounded-full border border-[#cddcf3] px-6 py-3 text-sm font-semibold text-[#0c2c64] transition hover:bg-[#f4f8ff]"
+            />
             <Link href="/" className="rounded-full bg-[#0c2c64] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#123a7f]">
-              {t(lang, "Ana Sayfaya Dön", "Back to Home")}
-            </Link>
-            <Link href="/contact" className="rounded-full border border-[#cddcf3] px-6 py-3 text-sm font-semibold text-[#0c2c64] transition hover:bg-[#f4f8ff]">
-              {t(lang, "İletişime Geç", "Contact Us")}
+              {t(lang, "Ana Sayfaya Git", "Go to Home")}
             </Link>
           </div>
         </div>
