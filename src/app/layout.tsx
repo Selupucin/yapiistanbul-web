@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { headers } from "next/headers";
 import { Playfair_Display, Manrope } from "next/font/google";
 import { getLang } from "@/lib/i18n";
 import { localePath, stripLocale } from "@/lib/locale";
 import { safeSettings } from "@/lib/data";
 import "./globals.css";
+
+// Google Analytics 4 measurement ID. Public (visible in the page), so it can
+// live in code; override per environment with NEXT_PUBLIC_GA_ID if needed.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-7Z9D6K3RCR";
 
 const titleFont = Playfair_Display({
   variable: "--font-title",
@@ -75,7 +80,23 @@ export default async function RootLayout({
       lang={lang}
       className={`${titleFont.variable} ${bodyFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        {GA_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`}
+            </Script>
+          </>
+        ) : null}
+      </body>
     </html>
   );
 }

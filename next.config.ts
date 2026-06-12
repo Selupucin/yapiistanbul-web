@@ -7,11 +7,11 @@ import type { NextConfig } from "next";
 // Unsplash + Cloudinary images, and the Google Maps embed on /contact.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
   "frame-src 'self' https://www.google.com https://maps.google.com",
   "object-src 'none'",
   "base-uri 'self'",
